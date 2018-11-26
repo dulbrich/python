@@ -1,5 +1,8 @@
 from datetime import datetime
 from calendar import monthrange
+from flask import Flask
+
+app = Flask(__name__)
 
 class Passed_Time:
 	
@@ -29,9 +32,59 @@ def price(time, today):
 	price += 100 * month_percentage
 	return price
 	
-bday = datetime(1986,9,12)
-today = datetime(2018,10,22)
-pt = diff(today, bday)
-price = price(pt, today)
-print("Years: " + str(pt.years) + " Months: " + str(pt.months) + " Days: " + str(pt.days))
-#print("Price: " + str(price))
+def print_age(person):
+	age = diff(datetime.today(), person[1])
+	pstrng = person[0] + ": " + str(age.years) + "yrs " 
+	pstrng += str(age.months) + "mnths & " + str(age.days) + "dys old"
+	return pstrng
+	
+def age_diff(p_one, p_two):
+	d = diff(p_one[1], p_two[1])
+	pstrng = p_one[0] + " & " + p_two[0] + " are "
+	pstrng += str(d.years) + "yrs " + str(d.months) + "mnths & " + str(d.days) + "dys apart."
+	return pstrng
+
+@app.route('/ages')
+def ages():
+    melody_bday = datetime(1982, 12, 24)
+    david_bday = datetime(1986, 9, 12)
+    kylie_bday = datetime(2016, 5, 30)
+    harvey_bday = datetime(2018, 7, 1)
+    dad_bday = datetime(1954, 10, 3)
+    mom_bday = datetime(1955, 7, 17)
+    kurt_bday = datetime(1976, 12, 7)
+    stephanie_bday = datetime(1978, 6, 30)
+    angie_bday = datetime(1980, 3, 13)
+    michelle_bday = datetime(1982, 2, 10)
+    jonathan_bday = datetime(1992, 6, 15)
+    christian_bday = datetime(1998, 4, 11)
+    ulbrichs = [
+            ("MELODY", melody_bday), #0
+            ("DAVID", david_bday), #1
+            ("KYLIE", kylie_bday), #2
+            ("HARVEY", harvey_bday), #3
+            ("DAD", dad_bday), #4
+            ("MOM", mom_bday), #5
+            ("KURT", kurt_bday), #6
+            ("STEPHANIE", stephanie_bday), #7
+            ("ANGIE", angie_bday), #8
+            ("MICHELLE", michelle_bday), #9
+            ("JONATHAN", jonathan_bday), #10
+            ("CHRISTIAN", christian_bday) #11
+    ]
+    return_string = ""
+    for member in ulbrichs:
+            #print(print_age(member))
+            age = print_age(member)
+            return_string += f"{age}</br>"
+    return return_string
+
+def main():
+    #print(age_diff(ulbrichs[6], ulbrichs[4]))
+    #print(age_diff(ulbrichs[11], ulbrichs[6]))
+    #print(age_diff(ulbrichs[11], ulbrichs[4]))
+    #print(age_diff(ulbrichs[1], ulbrichs[0]))
+    app.run(host='0.0.0.0', port='9006')
+
+if __name__ == "__main__":
+    main()
